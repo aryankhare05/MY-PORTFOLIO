@@ -1,0 +1,135 @@
+/* ---------------------------------------------------------------------- */
+/* Sitewide ambient background — fixed behind every section              */
+/* ---------------------------------------------------------------------- */
+
+.bg-fx {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  --mx: 50%;
+  --my: 40%;
+}
+
+.bg-fx-grid {
+  position: absolute;
+  inset: -2px;
+  background-image:
+    linear-gradient(rgba(var(--accent-rgb), 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent-rgb), 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, #000 45%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, #000 45%, transparent 100%);
+  animation: bg-fx-grid-drift 40s linear infinite;
+}
+
+@keyframes bg-fx-grid-drift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 56px 112px, 56px 112px;
+  }
+}
+
+.bg-fx-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  will-change: transform;
+}
+
+.bg-fx-blob-a {
+  width: 560px;
+  height: 560px;
+  top: -160px;
+  left: -120px;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.55), transparent 70%);
+  animation: bg-fx-drift-a 26s ease-in-out infinite;
+}
+
+.bg-fx-blob-b {
+  width: 460px;
+  height: 460px;
+  top: 40%;
+  right: -140px;
+  background: radial-gradient(circle, rgba(99, 179, 237, 0.4), transparent 70%);
+  animation: bg-fx-drift-b 32s ease-in-out infinite;
+}
+
+.bg-fx-blob-c {
+  width: 420px;
+  height: 420px;
+  bottom: -140px;
+  left: 30%;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.35), transparent 70%);
+  animation: bg-fx-drift-c 36s ease-in-out infinite;
+}
+
+@keyframes bg-fx-drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, 90px) scale(1.08); }
+}
+
+@keyframes bg-fx-drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-70px, -60px) scale(1.1); }
+}
+
+@keyframes bg-fx-drift-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, -70px) scale(1.06); }
+}
+
+/* Very soft glow that eases toward the cursor position (desktop only). */
+.bg-fx-cursor-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    480px circle at var(--mx) var(--my),
+    rgba(var(--accent-rgb), 0.06),
+    transparent 60%
+  );
+}
+
+/* Faint grain so large blurred gradients don't look banded/flat. */
+.bg-fx-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-fx-grid,
+  .bg-fx-blob {
+    animation: none;
+  }
+  .bg-fx-cursor-glow {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .bg-fx-blob {
+    filter: blur(60px);
+    opacity: 0.22;
+  }
+  .bg-fx-cursor-glow {
+    display: none;
+  }
+}
+
+/* Every section paints its own solid/near-solid background already
+   (var(--bg) / var(--bg-alt)); lower their opacity slightly so the
+   ambient layer behind shows through without hurting text contrast. */
+.hero,
+.section,
+.navbar-scrolled,
+.footer {
+  position: relative;
+  z-index: 1;
+}

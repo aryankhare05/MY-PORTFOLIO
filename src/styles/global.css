@@ -1,0 +1,379 @@
+/* Lets the conic-gradient border on .tilt-card animate smoothly in browsers
+   that support @property; harmlessly ignored elsewhere (the ring still
+   shows, just without the smooth spin interpolation). */
+@property --border-spin {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(var(--accent-rgb), 0.3);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Layout helpers */
+/* ---------------------------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  padding: 96px 0;
+}
+
+.section-alt {
+  background: var(--bg-alt);
+}
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 10px;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 14px;
+  color: var(--text-primary);
+}
+
+.section-lede {
+  font-size: 15.5px;
+  color: var(--text-secondary);
+  max-width: 60ch;
+  line-height: 1.65;
+  margin: 0 0 48px;
+}
+
+.section-header {
+  margin-bottom: 44px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Shared elements */
+/* ---------------------------------------------------------------------- */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.btn {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --magnet-x: 0px;
+  --magnet-y: 0px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  transform: translate(var(--magnet-x), var(--magnet-y));
+}
+.btn:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.25), 0 12px 30px -10px rgba(var(--accent-rgb), 0.35);
+  transform: translate(var(--magnet-x), calc(var(--magnet-y) - 2px));
+}
+/* Soft light that follows the cursor across the button surface. */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(120px circle at var(--glow-x) var(--glow-y), rgba(var(--accent-rgb), 0.22), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.btn:hover::before {
+  opacity: 1;
+}
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #06110e;
+}
+.btn-primary:hover {
+  background: var(--accent);
+  filter: brightness(1.08);
+  border-color: var(--accent);
+  box-shadow: 0 0 24px rgba(var(--accent-rgb), 0.55), 0 12px 30px -10px rgba(var(--accent-rgb), 0.5);
+}
+.btn-primary::before {
+  background: radial-gradient(120px circle at var(--glow-x) var(--glow-y), rgba(255, 255, 255, 0.3), transparent 70%);
+}
+.btn-ghost {
+  background: transparent;
+  border-color: var(--border-strong);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Click ripple — a short-lived span injected by useMagicInteractions.js */
+.btn-ripple {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  animation: btn-ripple-anim 0.6s ease-out forwards;
+}
+.btn-primary .btn-ripple {
+  background: rgba(6, 17, 14, 0.35);
+}
+@keyframes btn-ripple-anim {
+  to {
+    width: 260px;
+    height: 260px;
+    margin-left: -130px;
+    margin-top: -130px;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transform: none !important;
+  }
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.icon-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tilt + spotlight cards (Skills, Projects) — driven by useMagicInteractions */
+/* ---------------------------------------------------------------------- */
+
+.tilt-card {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --spot-x: 50%;
+  --spot-y: 50%;
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 900px;
+  transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tilt-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(220px circle at var(--spot-x) var(--spot-y), rgba(var(--accent-rgb), 0.16), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.tilt-card:hover::after {
+  opacity: 1;
+}
+
+/* Animated conic-gradient border that only appears on hover, drawn as a
+   thin ::before ring so the card's real border stays crisp otherwise. */
+.tilt-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--border-spin, 0deg),
+    rgba(var(--accent-rgb), 0.9),
+    transparent 30%,
+    transparent 70%,
+    rgba(var(--accent-rgb), 0.9)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  animation: tilt-border-spin 3.5s linear infinite;
+  pointer-events: none;
+}
+
+.tilt-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes tilt-border-spin {
+  to {
+    --border-spin: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card {
+    transform: none !important;
+  }
+  .tilt-card::before {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .tilt-card {
+    transform: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Scroll progress bar */
+/* ---------------------------------------------------------------------- */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: var(--scroll-progress, 0%);
+  background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.4), var(--accent));
+  z-index: 1100;
+  transition: width 0.1s linear;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Scroll-reveal */
+/* ---------------------------------------------------------------------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}

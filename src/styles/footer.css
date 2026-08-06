@@ -1,0 +1,49 @@
+.footer {
+  background: var(--bg-alt-translucent);
+  border-top: 1px solid var(--border);
+  padding: 28px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: var(--text-faint);
+  margin: 0;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 8px;
+}
+
+.footer-socials .icon-btn {
+  width: 36px;
+  height: 36px;
+}
+
+.footer-top-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.footer-top-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}

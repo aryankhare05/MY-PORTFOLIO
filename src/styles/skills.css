@@ -1,0 +1,34 @@
+.skills-section {
+  background: var(--bg-translucent);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.skills-card {
+  padding: 22px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.skills-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 14px 30px -16px rgba(var(--accent-rgb), 0.4);
+}
+
+.skills-card-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 14px;
+}
+
+.skills-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

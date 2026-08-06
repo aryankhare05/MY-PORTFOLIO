@@ -1,0 +1,49 @@
+:root {
+  /* ---- Typography ---- */
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* ---- One accent color, used everywhere for emphasis ---- */
+  --accent: #2dd4bf;
+  --accent-rgb: 45, 212, 191;
+  --accent-soft: rgba(45, 212, 191, 0.12);
+
+  /* ---- Solid dark palette (no transparency, no blur) ---- */
+  --bg: #08090d;
+  --bg-alt: #0c0e14;
+  --bg-card: #12141b;
+  --bg-card-hover: #171a23;
+  /* Slightly translucent versions of --bg / --bg-alt used only on the big
+     section wrappers, so the fixed ambient background (BackgroundFX) glows
+     through faintly behind the content instead of being fully hidden. */
+  --bg-translucent: rgba(8, 9, 13, 0.9);
+  --bg-alt-translucent: rgba(12, 14, 20, 0.9);
+  --border: #21242e;
+  --border-strong: #2c2f3b;
+
+  --text-primary: #f5f5f7;
+  --text-secondary: #9ca3af;
+  --text-faint: #6b7280;
+
+  --danger: #f87171;
+
+  --shadow-sm: 0 4px 14px -4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 16px 40px -12px rgba(0, 0, 0, 0.55);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --navbar-h: 68px;
+  --content-max: 1200px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
