@@ -7,6 +7,7 @@ const SOCIAL_LINKS = [
   { key: 'github', icon: 'github', href: links.github },
   { key: 'linkedin', icon: 'linkedin', href: links.linkedin },
   { key: 'email', icon: 'mail', href: `mailto:${links.email}`, gate: links.email },
+  { key: 'leetcode', icon: 'leetcode', href: links.leetcode, label: 'leetcode' },
 ].filter((s) => !isPlaceholder(s.gate ?? s.href))
 
 export default function Footer() {
